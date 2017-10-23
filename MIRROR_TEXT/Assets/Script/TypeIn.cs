@@ -6,8 +6,14 @@ using UnityEngine.SceneManagement;
 public class TypeIn : MonoBehaviour {
 	[SerializeField] InputField inputField;
 	[SerializeField] DisplayText display;
+	int MaxDialogAllow;
+	[SerializeField]int NANA_NUM;
+	[SerializeField]int PAUL_NUM;
 	// Use this for initialization
 	void Start () {
+		NANA_NUM = 0;
+		PAUL_NUM = 0;
+		MaxDialogAllow = 3;
 		inputField.onEndEdit.AddListener(AcceptStringInput);
 	}
 	void AcceptStringInput(string userInput){
@@ -16,19 +22,55 @@ public class TypeIn : MonoBehaviour {
 			SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 		}
 		int method = Random.Range(0,4);
+		int flag = Random.Range(0,2);
+		if(NANA_NUM >= MaxDialogAllow){
+			flag = 0;
+			while(method == 1){
+				method = Random.Range(0,4);
+			}
+		}
+		if(PAUL_NUM >= MaxDialogAllow){
+			flag = 1;
+			while(method == 0){
+				method = Random.Range(0,4);
+			}
+		}
+
 		switch (method)
 		{
 			case 0:
-				display.LogInText(userInput,2);
+				display.LogInText(userInput,0);
+				PAUL_NUM ++;
+				NANA_NUM = 0;
 				break;
 			case 1:
-				display.LogInText(userInput,0);
+				display.LogInText(userInput,2);
+				PAUL_NUM = 0;
+				NANA_NUM ++;
 				break;
 			case 2:
-				display.LogInText_Line(userInput,3);
+				if(flag == 1){
+					PAUL_NUM = 0;
+					NANA_NUM ++;
+					flag = 2;
+				}
+				else{
+					PAUL_NUM ++;
+					NANA_NUM = 0;
+				}
+				display.LogInText_Line(userInput,Random.Range(3,6), flag);
 				break;
 			case 3:
-				display.LogInText_Space(userInput,3);
+				if(flag == 1){
+					PAUL_NUM = 0;
+					NANA_NUM ++;
+					flag = 2;
+				}
+				else{
+					PAUL_NUM ++;
+					NANA_NUM = 0;
+				}
+				display.LogInText_Space(userInput,Random.Range(3,6), flag);
 				break;
 		}
 
