@@ -6,6 +6,7 @@ public class DisplayText : MonoBehaviour {
 	List<string> text = new List<string>();
 	// Use this for initialization
 	void Start () {
+		Cursor.lockState = CursorLockMode.Locked;
 		LogInText(displayText.text);
 	}
 	public void LogInText(string logingText){

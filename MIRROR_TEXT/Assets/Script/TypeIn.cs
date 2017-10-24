@@ -6,45 +6,47 @@ using UnityEngine.SceneManagement;
 public class TypeIn : MonoBehaviour {
 	[SerializeField] InputField inputField;
 	[SerializeField] DisplayText display;
+	GameController controller;
 	int MaxDialogAllow;
-	[SerializeField]int NANA_NUM;
-	[SerializeField]int PAUL_NUM;
+	protected int NANA_NUM;
+	protected int PAUL_NUM;
 	// Use this for initialization
 	void Start () {
 		NANA_NUM = 0;
 		PAUL_NUM = 0;
 		MaxDialogAllow = 3;
 		inputField.onEndEdit.AddListener(AcceptStringInput);
+		controller = FindObjectOfType<GameController>();
 	}
 	void AcceptStringInput(string userInput){
 		userInput = userInput.ToLower();
 		if(userInput == "reset"){
 			SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 		}
-		int method = Random.Range(0,4);
+		int method = Random.Range(0,6);
 		int flag = Random.Range(0,2);
 		if(NANA_NUM >= MaxDialogAllow){
 			flag = 0;
 			while(method == 1){
-				method = Random.Range(0,4);
+				method = Random.Range(0,6);
 			}
 		}
 		if(PAUL_NUM >= MaxDialogAllow){
 			flag = 1;
 			while(method == 0){
-				method = Random.Range(0,4);
+				method = Random.Range(0,6);
 			}
 		}
 
 		switch (method)
 		{
 			case 0:
-				display.LogInText(userInput,0);
+				controller.LogInText(userInput,0);
 				PAUL_NUM ++;
 				NANA_NUM = 0;
 				break;
 			case 1:
-				display.LogInText(userInput,2);
+				controller.LogInText(userInput,2);
 				PAUL_NUM = 0;
 				NANA_NUM ++;
 				break;
@@ -58,7 +60,7 @@ public class TypeIn : MonoBehaviour {
 					PAUL_NUM ++;
 					NANA_NUM = 0;
 				}
-				display.LogInText_Line(userInput,Random.Range(3,6), flag);
+				controller.LogInText_Line(userInput,Random.Range(3,6), flag);
 				break;
 			case 3:
 				if(flag == 1){
@@ -70,14 +72,20 @@ public class TypeIn : MonoBehaviour {
 					PAUL_NUM ++;
 					NANA_NUM = 0;
 				}
-				display.LogInText_Space(userInput,Random.Range(3,6), flag);
+				controller.LogInText_Space(userInput,Random.Range(3,6), flag);
+				break;
+			case 4:
+				controller.LogInText_Space(userInput,Random.Range(3,6), 3);
+				break;
+			case 5:
+				controller.LogInText_Line(userInput,Random.Range(3,6), 3);
 				break;
 		}
 
 		InputComplete();
 	}
 	void InputComplete(){
-		display.DisplayLoggedText ();
+		controller.DisplayLoggedText ();
         inputField.ActivateInputField ();
         inputField.text = null;
 	}
