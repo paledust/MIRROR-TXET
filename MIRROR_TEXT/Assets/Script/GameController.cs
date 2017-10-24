@@ -30,6 +30,7 @@ public class GameController : MonoBehaviour {
     }
 
 	public void DisplayLoggedText(){
+		Debug.Log("Display");
 		string logAsText = string.Join("\n", text.ToArray());
 		if(displayText != null){
 			displayText.text = logAsText;

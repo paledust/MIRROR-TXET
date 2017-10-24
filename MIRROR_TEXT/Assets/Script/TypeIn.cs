@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 public class TypeIn : MonoBehaviour {
 	[SerializeField] InputField inputField;
-	[SerializeField] DisplayText display;
 	GameController controller;
 	int MaxDialogAllow;
 	protected int NANA_NUM;
@@ -20,9 +19,20 @@ public class TypeIn : MonoBehaviour {
 	}
 	void AcceptStringInput(string userInput){
 		userInput = userInput.ToLower();
+		char[] delimiterCharacters  = {' '};
+		string[] separatedInputWords = userInput.Split(delimiterCharacters);
+
 		if(userInput == "reset"){
 			SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 		}
+
+        for (int i = 0; i < controller.inputActions.Length; i++) {
+            InputAction inputAction = controller.inputActions [i];
+            if (inputAction.keyWord == separatedInputWords [0]) {
+                inputAction.RespondToInput (controller, separatedInputWords);
+            }
+        }
+
 		int method = Random.Range(0,6);
 		int flag = Random.Range(0,2);
 		if(NANA_NUM >= MaxDialogAllow){
@@ -38,8 +48,7 @@ public class TypeIn : MonoBehaviour {
 			}
 		}
 
-		switch (method)
-		{
+		switch (method){
 			case 0:
 				controller.LogInText(userInput,0);
 				PAUL_NUM ++;
